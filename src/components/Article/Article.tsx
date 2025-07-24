@@ -6,7 +6,12 @@ import './Article.css';
 interface Post {
   id: string;
   title: string;
+  excerpt: string;
   description: string;
+  date: string;
+  visits: number;
+  likes: number;
+  isLiked: boolean;
   image: string;
   tags: string[];
   url: string;
@@ -35,33 +40,31 @@ const Article: React.FC = () => {
     return formattedUrl;
   };
   
-  // Manejador para el clic en el botón de visita
-  const handleVisitTool = (e: React.MouseEvent, url: string) => {
-    e.preventDefault();
-    console.log('Intentando abrir URL:', url);
-    if (url) {
-      window.open(url, '_blank', 'noopener,noreferrer');
-    } else {
-      console.error('URL no válida:', url);
-    }
-  };
-
   // Si no venía en state, lo buscamos por ID
   useEffect(() => {
     if (!post && params.id) {
       fetch(`${API_BASE}/links/${params.id}`)
         .then(res => res.json())
         .then((l: any) => {
+          console.log('Datos del post desde la API:', l);
           setPost({
             id: l._id,
             title: l.title,
-            description: l.description,
+            excerpt: (l.description || '').slice(0, 100) + (l.description && l.description.length > 100 ? '...' : ''),
+            description: l.description || 'Sin descripción disponible',
+            date: new Date(l.createdAt || Date.now()).toLocaleDateString(),
+            visits: typeof l.visits === 'number' ? l.visits : 0,
+            likes: typeof l.likes === 'number' ? l.likes : 0,
+            isLiked: false,
             image: l.image || '/devpendenciasIMG/placeholder.png',
             tags: Array.isArray(l.tags) ? l.tags : [l.tags || 'Sin categoría'],
             url: formatUrl(l.url) // Aplicar formato a la URL
           });
         })
-        .catch(console.error);
+        .catch(error => {
+          console.error('Error cargando el post:', error);
+          // Mostrar mensaje de error al usuario
+        });
     }
   }, [params.id, post]);
 
@@ -107,8 +110,21 @@ const Article: React.FC = () => {
           ))}
         </div>
 
+        <div className="article-meta">
+          <span className="article-date">
+            Publicado el: {post.date}
+          </span>
+          <span className="article-visits">
+            👁️ {post.visits} visitas
+          </span>
+          <span className="article-likes">
+            ❤️ {post.likes} me gusta
+          </span>
+        </div>
+        
         <div className="article-description">
-          <p>{post.description}</p>
+          <h3>Descripción:</h3>
+          <p>{post.excerpt || post.description || 'Sin descripción disponible'}</p>
         </div>
 
         {post.image && (
@@ -123,7 +139,7 @@ const Article: React.FC = () => {
 
         <div className="article-actions">
           <button 
-            onClick={(e) => handleVisitTool(e, post.url)}
+            onClick={() => window.open(post.url, '_blank', 'noopener,noreferrer')}
             className="visit-button"
             disabled={!post.url}
           >

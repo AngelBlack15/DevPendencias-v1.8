@@ -82,12 +82,39 @@
   font-weight: 500;
 }
 
+/* Estilos para la fecha */
+.article-meta {
+  margin: 1.5rem 0;
+  color: #888;
+  font-size: 0.95rem;
+}
+
+.article-date {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 0.4rem 0.8rem;
+  border-radius: 4px;
+  font-style: italic;
+}
+
 /* Estilos para la descripción */
 .article-description {
   font-size: 1.1rem;
-  line-height: 1.7;
-  margin-bottom: 2.5rem;
-  color: #444;
+  line-height: 1.8;
+  margin: 2rem 0 3rem;
+  color: #e0e0e0;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 1.5rem;
+  border-radius: 8px;
+  border-left: 4px solid #00bcd4;
+}
+
+.article-description h3 {
+  color: #fff;
+  margin-top: 0;
+  margin-bottom: 1rem;
+  font-size: 1.3rem;
+  font-weight: 600;
 }
 
 /* Estilos para la imagen */
