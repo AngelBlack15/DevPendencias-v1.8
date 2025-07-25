@@ -55,3 +55,4 @@ export default tseslint.config({
 # Devpendencias_Chido
 # devpendenciasNOCHIDO
 # DevPendencias-v1.8
+# DevPendencias-v1.9
